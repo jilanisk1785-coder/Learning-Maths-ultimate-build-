@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Learning Maths Ultimate Next</title>
+<style>
+body{font-family:Arial;margin:0;background:#f4f4f4;text-align:center}
+header{background:#2563eb;color:white;padding:12px}
+.btn{display:block;width:320px;margin:10px auto;padding:12px;border:none;border-radius:8px;background:#2563eb;color:white}
+.page{display:none;padding:20px}
+.top{position:fixed;top:10px;left:10px}
+.next{position:fixed;bottom:15px;right:15px;padding:12px 18px}
+</style>
+</head>
+<body>
+<header><h1>📚 Learning Maths Ultimate Next</h1></header>
+
+<div id="home">
+<button class="btn" onclick="openTopic('Triangles')">📐 Triangles</button>
+<button class="btn" onclick="openTopic('Linear Equations')">✏️ Linear Equations</button>
+<button class="btn" onclick="openTopic('Percentages')">🧠 Percentages</button>
+</div>
+
+<div id="topicPage" class="page">
+<div class="top">
+<button onclick="goHome()">🏠 Home</button>
+</div>
+<h2 id="topicTitle"></h2>
+<button class="btn" onclick="openQuestions()">📝 Practice Questions</button>
+</div>
+
+<div id="questionPage" class="page">
+<div class="top">
+<button onclick="backTopic()">⬅ Previous</button>
+<button onclick="goHome()">🏠 Home</button>
+</div>
+<h2 id="questionTitle"></h2>
+<p id="question"></p>
+<div id="options"></div>
+<div id="result"></div>
+<button class="next" onclick="nextQuestion()">Next →</button>
+</div>
+
+<script>
+let currentTopic="",answer="",process="";
+
+function hideAll(){
+ home.style.display='none';
+ topicPage.style.display='none';
+ questionPage.style.display='none';
+}
+function goHome(){hideAll();home.style.display='block';}
+function openTopic(t){
+ currentTopic=t;
+ hideAll();
+ topicPage.style.display='block';
+ topicTitle.innerText=t;
+}
+function backTopic(){openTopic(currentTopic);}
+function openQuestions(){
+ hideAll();
+ questionPage.style.display='block';
+ questionTitle.innerText=currentTopic+" Questions";
+ nextQuestion();
+}
+function shuffle(a){return a.sort(()=>Math.random()-0.5);}
+
+function nextQuestion(){
+ let q="",opts=[];
+ if(currentTopic==="Triangles"){
+   let a=40+Math.floor(Math.random()*40);
+   let b=30+Math.floor(Math.random()*40);
+   let c=180-a-b;
+   q=`Angles are ${a}° and ${b}°. Find the third angle.`;
+   answer=String(c);
+   process=`180 - ${a} - ${b} = ${c}`;
+   opts=shuffle([String(c),String(c+10),String(c-10),String(c+20)]);
+ }
+ else if(currentTopic==="Linear Equations"){
+   let x=1+Math.floor(Math.random()*20);
+   let b=1+Math.floor(Math.random()*10);
+   q=`x + ${b} = ${x+b}. Find x.`;
+   answer=String(x);
+   process=`${x+b} - ${b} = ${x}`;
+   opts=shuffle([String(x),String(x+1),String(x-1),String(x+2)]);
+ }
+ else{
+   let n=(Math.floor(Math.random()*9)+2)*100;
+   q=`25% of ${n} = ?`;
+   answer=String(n/4);
+   process=`${n} × 25 ÷ 100 = ${n/4}`;
+   opts=shuffle([String(n/4),String(n/2),String(n/5),String(n/10)]);
+ }
+
+ document.getElementById('question').innerText=q;
+ document.getElementById('result').innerHTML='';
+ document.getElementById('options').innerHTML=opts.map(
+ o=>`<button class="btn" onclick="checkAns('${o}')">${o}</button>`
+ ).join('');
+}
+
+function checkAns(v){
+ if(v===answer){
+   result.innerHTML='✅ Correct Answer';
+ }else{
+   result.innerHTML='❌ Wrong Answer<br>✅ Correct Answer: '+answer+'<br><br>Process:<br>'+process;
+ }
+}
+</script>
+</body>
+</html>
